@@ -1,0 +1,16 @@
+{
+   "name": "demo-anntlr-ng",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "devDependencies": {
+    "antlr-ng": "^1.0.10"
+  },
+  "dependencies": {
+    "@types/node": "^25.3.0",
+    "antlr4ng": "^3.0.16",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
