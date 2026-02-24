@@ -1,17 +1,26 @@
-import { CharStream, CommonTokenStream, ParseTreeWalker } from "antlr4ng";
-import { ExprLexer } from "./ExprLexer.js";
-import { ExprParser } from "./ExprParser.js";
-import { EvalListener } from "./EvalListener.js";
+import { CharStream, CommonTokenStream } from "antlr4ng";
+import { FormulaLexer } from "./generated/FormulaLexer";
+import { FormulaParser } from "./generated/FormulaParser";
+import { FormulaVisitorImpl } from "./FormulaVisitorImpl";
 
-const input = "3 + 4 * 2";
+const input = `
+a = 10
+b = 20
+SUM(a, b, 30) + AVG(10, 20)
+`;
+
 const chars = CharStream.fromString(input);
-const lexer = new ExprLexer(chars);
+const lexer = new FormulaLexer(chars);
 const tokens = new CommonTokenStream(lexer);
-const parser = new ExprParser(tokens);
+const parser = new FormulaParser(tokens);
 
-const tree = parser.prog();
+const tree = parser.program();
+const visitor = new FormulaVisitorImpl();
 
-const listener = new EvalListener();
-ParseTreeWalker.DEFAULT.walk(listener, tree);
+let result = 0;
 
-console.log("Result:", listener.getResult());
+for (const stmt of tree.statement()) {
+  result = visitor.visit(stmt)!;
+}
+
+console.log("Result:", result); // 75
